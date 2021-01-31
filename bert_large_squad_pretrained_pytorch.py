@@ -61,7 +61,7 @@ for question in questions:
 
 start_scores, end_scores = model(input_ids=torch.tensor(input_ids_all, device=gpu),
                                  attention_mask=torch.tensor(attention_masks, device=gpu),
-                                 token_type_ids=torch.tensor(token_type_ids_all, device=gpu))
+                                 token_type_ids=torch.tensor(token_type_ids_all, device=gpu), return_dict=False)
 
 # Q: What project put the first Americans into space?
 # A: Project Mercury

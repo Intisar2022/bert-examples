@@ -195,7 +195,7 @@ for epoch in range(1, epochs + 1):
                            attention_mask=input_mask,
                            token_type_ids=input_type_ids,
                            start_positions=start_token_idx,
-                           end_positions=end_token_idx)
+                           end_positions=end_token_idx, return_dict=False)
         loss.backward()
         optimizer.step()
         tr_loss += loss.item()
@@ -218,7 +218,7 @@ for epoch in range(1, epochs + 1):
         with torch.no_grad():
             start_logits, end_logits = model(input_ids=input_word_ids,
                                              attention_mask=input_mask,
-                                             token_type_ids=input_type_ids)
+                                             token_type_ids=input_type_ids, return_dict=False)
             pred_start, pred_end = start_logits.detach().cpu().numpy(), end_logits.detach().cpu().numpy()
 
         for idx, (start, end) in enumerate(zip(pred_start, pred_end)):
@@ -298,7 +298,7 @@ test_samples = create_squad_examples(data, "Creating test points")
 x_test, _ = create_inputs_targets(test_samples)
 pred_start, pred_end = model(torch.tensor(x_test[0], dtype=torch.int64, device=gpu),
                              torch.tensor(x_test[1], dtype=torch.float, device=gpu),
-                             torch.tensor(x_test[2], dtype=torch.int64, device=gpu))
+                             torch.tensor(x_test[2], dtype=torch.int64, device=gpu), return_dict=False)
 pred_start, pred_end = pred_start.detach().cpu().numpy(), pred_end.detach().cpu().numpy()
 for idx, (start, end) in enumerate(zip(pred_start, pred_end)):
     test_sample = test_samples[idx]

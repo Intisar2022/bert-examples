@@ -111,7 +111,7 @@ for epoch in range(1, epochs + 1):
         loss, _ = model(input_ids=input_word_ids,
                         attention_mask=input_mask,
                         token_type_ids=input_type_ids,
-                        labels=labels)
+                        labels=labels, return_dict=False)
         loss.backward()
         optimizer.step()
         tr_loss += loss.item()
@@ -133,7 +133,7 @@ for epoch in range(1, epochs + 1):
         with torch.no_grad():
             logits = model(input_ids=input_word_ids,
                            attention_mask=input_mask,
-                           token_type_ids=input_type_ids)
+                           token_type_ids=input_type_ids, return_dict=False)
 
         logits = logits[0].detach().cpu().numpy()
         label_ids = labels.cpu().numpy()
@@ -158,7 +158,7 @@ input_word_ids_test, input_masks_test, input_type_ids_test, _ = convert_examples
                                                                                              "Creating test samples")
 result = model(input_ids=input_word_ids_test.to(gpu),
                attention_mask=input_masks_test.to(gpu),
-               token_type_ids=input_type_ids_test.to(gpu))
+               token_type_ids=input_type_ids_test.to(gpu), return_dict=False)
 result = result[0].detach().cpu()
 print(result.numpy())
 result = torch.argmax(result, dim=1).numpy()
